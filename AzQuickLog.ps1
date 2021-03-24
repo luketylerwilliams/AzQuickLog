@@ -242,21 +242,29 @@ function ResourcePopulateMultipleSubscriptions() {
     # Iterate through array and check if the subscription is valid
     foreach ($sub in $global:scopeChildArray) {
         try {
-            $testSub = Get-AzSubscription -SubscriptionId $sub -ErrorAction SilentlyContinue
+            $testSub = Get-AzSubscription -SubscriptionId $sub -ErrorAction Stop
             $global:subscriptionArray += $sub
         }
         catch [System.Management.Automation.PSArgumentException] {
             continue
         } 
+        catch { 
+            continue
+        }
     }
     # Loop through all Azure Subscriptions and get the resources
     Write-Host "--------------------------------------------------------------------" -ForegroundColor Yellow
     Write-Host "Beginning loop through subscriptions to get all resources" -ForegroundColor Yellow
 
     foreach ($azSub in $global:subscriptionArray) {
-        Write-Host "Setting context to Subscription:" $azSub
-        Set-AzContext -Subscription $azSub -ErrorAction SilentlyContinue | Out-Null
-        TargetSelection
+        try {
+            Write-Host "Setting context to Subscription:" $azSub
+            Set-AzContext -Subscription $azSub -ErrorAction Stop | Out-Null
+            TargetSelection
+        }
+        catch { 
+            continue
+        }  
     } 
     # Function completion, reshow menu
     subMenu
@@ -338,7 +346,7 @@ function RemoveFunc() {
 
 function RemoveDiag() {
     try {
-        $createDir = New-Item -Name "AuditLogs" -ItemType directory -ErrorAction SilentlyContinue
+        $createDir = New-Item -Name "AuditLogs" -ItemType directory -ErrorAction Stop
     }
     catch {
         continue
@@ -362,7 +370,7 @@ function RemoveDiag() {
             }
             # Remove diagnostic settings for the particular resource
             [string]$azDiagid = $azdiag.id -replace "(?=/providers/microsoft.insights).*"
-            $removeDiag = Remove-AzDiagnosticSetting -ResourceId $azDiagid -Name $azDiag.Name
+            $removeDiag = Remove-AzDiagnosticSetting -ResourceId $azDiagid -Name $script:dsName
             if (!$removeDiag) {
                 $removeDiag = New-Object pscustomobject
                 $removeDiag | Add-Member -NotePropertyName StatusCode -NotePropertyValue "ErrorResponseException"
@@ -375,6 +383,12 @@ function RemoveDiag() {
             # Acquire subscription id
             $resourceSubscription = ($resourceId -split "/")[2]
             # Save logs to AuditLogs folder in text file named by subscription id
+            try {
+                
+            }
+            catch {
+                # File with the same name already exists
+            }
             $fileNamePath = "AuditLogs\$resourceSubscription"
             $azAuditLog >> .\$fileNamePath.txt
         }  
