@@ -4,6 +4,18 @@ For more information please see article on medium!
 
 https://luketylerwilliams.medium.com/azquicklog-cda6040ded6b
 
+## Prerequisites​:
+```
+PowerShell
+```
+
+## Getting Started 
+
+```
+git clone https://github.com/luketylerwilliams/AzQuickLog.git
+cd AzQuickLog
+./AzQuickLog.ps1
+```
 
 # Changelog
 ## v1.2:
