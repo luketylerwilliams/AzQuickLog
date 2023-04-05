@@ -6,7 +6,8 @@ https://luketylerwilliams.medium.com/azquicklog-cda6040ded6b
 
 ## Prerequisites​:
 ```
-PowerShell
+- PowerShell
+- Azure Az PowerShell module
 ```
 
 ## Getting Started 
@@ -15,6 +16,12 @@ PowerShell
 git clone https://github.com/luketylerwilliams/AzQuickLog.git
 cd AzQuickLog
 ./AzQuickLog.ps1
+```
+
+Install Azure Az Powershell (if not already installed)
+```
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+Install-Module -Name Az -Scope CurrentUser -Repository PSGallery -Force
 ```
 
 # Changelog
