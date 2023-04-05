@@ -18,6 +18,10 @@ cd AzQuickLog
 ```
 
 # Changelog
+## v2
++ Improved error handling
++ Improved processing, added multi-threading using powershell jobs
++ Fixed storage account iteration through sub-levels (blob,table,queue,file)
 ## v1.2:
 + Improved error handling
 + Bug fix with management group scope
